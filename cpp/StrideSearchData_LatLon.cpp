@@ -2,6 +2,7 @@
 #include "StrideSearchData_Base.h"
 #include "StrideSearchData_LatLon.h"
 #include "StrideSearchWorkspace.h"
+#include "kdd_radius.h"
 #include <netcdf>
 #include <iostream>
 #include <sstream>
@@ -26,6 +27,14 @@ void StrideSearchData_LatLon::initDimensions(){
    nc_data = Workspace2D(variables, nLat, nLon);
 }
 
+void StrideSearchData_LatLon::buildTree(){
+   kdd_radius kdd(nc_data);
+   kdd.runtest();
+}
+
+Workspace2D StrideSearchData_LatLon::getWorkspace(){
+  return nc_data;
+}
 
 void StrideSearchData_LatLon::getGridDescription(int* gridDescInts) const {
     gridDescInts[0] = nLat;
@@ -44,8 +53,10 @@ std::string StrideSearchData_LatLon::basicInfo() const {
 
 void StrideSearchData_LatLon::readFullFile(const std::string var)
 {
-  for(int i = 0; i < nLat; i++){
-    read2DDataFromSingle(var,i);
+  for(int j = 0; j < 3; j++){
+    for(int i = 0; i < nLat; i++){
+      read2DDataFromSingle(var,i);
+    }
   }
 };
 
@@ -58,13 +69,15 @@ void StrideSearchData_LatLon::read2DDataFromSingle(const std::string var, const 
 
 void StrideSearchData_LatLon::readFullWChunks(const int time_index)
 {
-  for(int i = 0; i < nLon; ++i){
+  for(int i = 0; i < nLon*3; ++i){
     read2DDataFromTimestep(time_index,0);
   }
 };
 
 void StrideSearchData_LatLon::read2DDataFromTimestep(const int time_index, const int level_index){
-    netCDF::NcFile file(filename, netCDF::NcFile::read);    
+  std::cout<<"here\n";
+    netCDF::NcFile file(filename, netCDF::NcFile::read);  
+  std::cout<<"here\n";
     for (auto& elem : nc_data.data2d) {
         netCDF::NcVar ncv(file.getVar(elem.first));
         std::vector<netCDF::NcDim> dims(ncv.getDims());

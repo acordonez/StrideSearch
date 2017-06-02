@@ -27,6 +27,10 @@ class StrideSearchData_LatLon : public StrideSearchData {
 	
 	void readFullWChunks(const int time_index);
 
+	void buildTree();
+
+	Workspace2D getWorkspace();
+
         void read2DDataFromTimestep(const int time_index, const int level_index = 0);
         
         std::string basicInfo() const;

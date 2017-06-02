@@ -87,7 +87,7 @@ void Workspace2D::allocMemory(){
 }
 
 void Workspace2D::deleteMemory(){
-//     std::cout << "DELETE MEMORY entry, allocated = " << (allocated ? "true " : "false ") << std::endl;
+  std::cout << "DELETE MEMORY entry, allocated = " << (allocated ? "true " : "false ") << std::endl;
     if (allocated) {
         for (auto& elem : data2d) {
             for (int i = 0; i < dim0_size; ++i)
@@ -101,10 +101,10 @@ void Workspace2D::deleteMemory(){
 }
 
 Workspace2D& Workspace2D::operator=(const Workspace2D& other){
-//     std::cout << "OPERATOR = entry, allocated = " << (allocated ? "true " : "false ") << std::endl;
+     std::cout << "OPERATOR = entry, allocated = " << (allocated ? "true " : "false ") << std::endl;
     if (this != &other){
         if (this->allocated)
-            deleteMemory();
+	  deleteMemory();
         this->dim0_size = other.dim0_size;
         this->dim1_size = other.dim1_size;
         this->varnames = other.varnames;

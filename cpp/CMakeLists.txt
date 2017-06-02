@@ -43,7 +43,8 @@ set (CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install CACHE STRING
 ADD_LIBRARY(stridesearch StrideSearchUtilities.cpp StrideSearchEvent.cpp 
     StrideSearchDateTime.cpp StrideSearchWorkspace.cpp
     StrideSearchData_Base.cpp StrideSearchData_LatLon.cpp
-    StrideSearchSectorList_Base.cpp StrideSearchSectorList_LatLon.cpp)
+    StrideSearchSectorList_Base.cpp StrideSearchSectorList_LatLon.cpp
+    kdd_radius.cpp)
 TARGET_LINK_LIBRARIES(stridesearch ${netcdf} ${netcdf_c++})
 
 #

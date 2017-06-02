@@ -21,6 +21,8 @@ int main (int argc, char* argv[]) {
     StrideSearchData_LatLon ncData(inputFile, search_vars);
     
     std::cout << ncData.basicInfo();
+
+    ncData.buildTree();
     
     const int time_index = 0;
     const int level_index = 2;
