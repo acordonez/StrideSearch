@@ -21,8 +21,6 @@ int main (int argc, char* argv[]) {
     StrideSearchData_LatLon ncData(inputFile, search_vars);
     
     std::cout << ncData.basicInfo();
-
-    ncData.buildTree();
     
     const int time_index = 0;
     const int level_index = 2;
@@ -75,6 +73,8 @@ int main (int argc, char* argv[]) {
     ncData.readFullWChunks(time_index);
     duration = (std::clock()-start)/(double)CLOCKS_PER_SEC;
     std::cout<<"Chunk: "<<duration<<"\n";
+
+    ncData.buildTree();
 
 
 return 0;

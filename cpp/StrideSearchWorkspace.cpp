@@ -87,7 +87,7 @@ void Workspace2D::allocMemory(){
 }
 
 void Workspace2D::deleteMemory(){
-  std::cout << "DELETE MEMORY entry, allocated = " << (allocated ? "true " : "false ") << std::endl;
+  //std::cout << "DELETE MEMORY entry, allocated = " << (allocated ? "true " : "false ") << std::endl;
     if (allocated) {
         for (auto& elem : data2d) {
             for (int i = 0; i < dim0_size; ++i)

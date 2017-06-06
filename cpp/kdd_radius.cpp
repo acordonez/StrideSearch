@@ -161,6 +161,8 @@ void kdtree_demo(const size_t N)
 
 }
 
+kdd_radius::kdd_radius(Workspace2D& data):nc_data(data){}
+
 void kdd_radius::runtest()
 {
   // Randomize Seed

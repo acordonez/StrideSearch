@@ -28,8 +28,8 @@ void StrideSearchData_LatLon::initDimensions(){
 }
 
 void StrideSearchData_LatLon::buildTree(){
-   kdd_radius kdd(nc_data);
-   kdd.runtest();
+  kdd_radius* kdd = new kdd_radius(nc_data);
+  kdd->runtest();
 }
 
 Workspace2D StrideSearchData_LatLon::getWorkspace(){
@@ -75,9 +75,7 @@ void StrideSearchData_LatLon::readFullWChunks(const int time_index)
 };
 
 void StrideSearchData_LatLon::read2DDataFromTimestep(const int time_index, const int level_index){
-  std::cout<<"here\n";
     netCDF::NcFile file(filename, netCDF::NcFile::read);  
-  std::cout<<"here\n";
     for (auto& elem : nc_data.data2d) {
         netCDF::NcVar ncv(file.getVar(elem.first));
         std::vector<netCDF::NcDim> dims(ncv.getDims());

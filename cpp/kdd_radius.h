@@ -11,9 +11,8 @@
 class kdd_radius
 {
  public:
- kdd_radius(Workspace2D data): nc_data(data){};
+  kdd_radius(Workspace2D& data);
   void runtest();
- protected:
   Workspace2D nc_data;
 };
 
