@@ -33,10 +33,19 @@
 #include <iostream>
 #include "StrideSearchUtilities.h"
 #include "kdd_radius.h"
+#include "StrideSearchData_Base.h"
+#include "StrideSearchDateTime.h"
+#include "StrideSearchWorkspace.h"
+#include <vector> 
+#include <string>
 
 
 using namespace std;
 using namespace nanoflann;
+
+int lons;
+int lats;
+Workspace2D data_nc;
 
 // This is an example of a custom data set class
 template <typename T>
@@ -44,7 +53,7 @@ struct PointCloud
 {
 	struct Point
 	{
-		T  x,y,z;
+	  T  x,y,z,vals;
 	};
 
 	std::vector<Point>  pts;
@@ -55,10 +64,23 @@ struct PointCloud
 	// Returns the distance between the vector "p1[0:size-1]" and the data point with index "idx_p2" stored in the class:
 	inline T kdtree_distance(const T *p1, const size_t idx_p2,size_t /*size*/) const
 	{
-		const T d0=p1[0]-pts[idx_p2].x;
-		const T d1=p1[1]-pts[idx_p2].y;
-		const T d2=p1[2]-pts[idx_p2].z;
-		return d0*d0+d1*d1+d2*d2;
+	  // const T d0=p1[0]-pts[idx_p2].x;
+	  // const T d1=p1[1]-pts[idx_p2].y;
+	  // const T d2=p1[2]-pts[idx_p2].z;
+	  // return d0*d0+d1*d1+d2*d2;
+	  double latA;
+	  double lonA;
+	  double latB;
+	  double lonB;
+	  const T d0A = p1[0];
+	  const T d1A = p1[1];
+	  const T d2A = p1[2];
+	  const T d0B = pts[idx_p2].x;
+	  const T d1B = pts[idx_p2].y;
+	  const T d2B = pts[idx_p2].z;
+	  XyzToLL(latA,lonA,d0A,d1A,d2A);
+	  XyzToLL(latB,lonB,d0B,d1B,d2B);
+	  return sphereDistance(latA,lonA,latB,lonB);
 	}
 
 	// Returns the dim'th component of the idx'th point in the class:
@@ -84,13 +106,25 @@ void generateRandomPointCloud(PointCloud<T> &point, const size_t N, const T max_
 {
 	std::cout << "Generating "<< N << " point cloud...";
 	point.pts.resize(N);
-	for (size_t i=0;i<N;i++)
-	{
-		point.pts[i].x = max_range * (rand() % 1000) / T(1000);
-		point.pts[i].y = max_range * (rand() % 1000) / T(1000);
-		point.pts[i].z = max_range * (rand() % 1000) / T(1000);
+	// for (size_t i=0;i<N;i++)
+	// {
+	// 	point.pts[i].x = max_range * (rand() % 1000) / T(1000);
+	// 	point.pts[i].y = max_range * (rand() % 1000) / T(1000);
+	// 	point.pts[i].z = max_range * (rand() % 1000) / T(1000);
+	// }
+	int i = 0;
+	double indX, indY, indZ;
+	for(int lat = 0; lat < lats; lat++){
+	  for(int lon = 0; lon < lons; lon++){
+	    llToXYZ(indX,indY,indZ,lat,lon);
+	    point.pts[i].x = indX;
+	    point.pts[i].y = indY;
+	    point.pts[i].z = indZ;
+	    point.pts[i].vals = data_nc["tas"][lat][lon];
+	    i++;
+	    //vals[i] = nc_data["tas"][lat][lon];
+	  }
 	}
-	
 
 	std::cout << "done\n";
 }
@@ -145,34 +179,68 @@ void kdtree_demo(const size_t N)
 	// radiusSearch():  Perform a search for the N closest points
 	// ----------------------------------------------------------------
 	{
-		const num_t search_radius = static_cast<num_t>(0.1);
-		std::vector<std::pair<size_t,num_t> >   ret_matches;
+	  //const num_t search_radius = static_cast<num_t>(0.1);
+	  const num_t search_radius = static_cast<num_t>(100);
+	  std::vector<std::pair<size_t,num_t> >   ret_matches;
+	  
+	  nanoflann::SearchParams params;
+	  //params.sorted = false;
 
-		nanoflann::SearchParams params;
-		//params.sorted = false;
-
-		const size_t nMatches = index.radiusSearch(&query_pt[0],search_radius, ret_matches, params);
-
-		cout << "radiusSearch(): radius=" << search_radius << " -> " << nMatches << " matches\n";
-		for (size_t i=0;i<nMatches;i++)
-			cout << "idx["<< i << "]=" << ret_matches[i].first << " dist["<< i << "]=" << ret_matches[i].second << endl;
-		cout << "\n";
+	  const size_t nMatches = index.radiusSearch(&query_pt[0],search_radius, ret_matches, params);
+	  
+	  cout << "radiusSearch(): radius=" << search_radius << " -> " << nMatches << " matches\n";
+	  for (size_t i=0;i<nMatches;i++)
+	    cout << "idx["<< i << "]=" << ret_matches[i].first << " dist["<< i << "]=" << ret_matches[i].second << endl;
+	    cout << "\n";
 	}
 
 }
 
-kdd_radius::kdd_radius(Workspace2D& data):nc_data(data){}
+kdd_radius::kdd_radius(Workspace2D& data,int& nLat, int& nLon):nc_data(data)
+{
+  numLat = nLat;
+  numLon = nLon;
+  lats = nLat;
+  lons = nLon;
+  data_nc = data;
+}
+
+void kdd_radius::convertLLToXY()
+{
+  int i = 0; 
+  double indX, indY, indZ;
+  for(int lat = 0; lat < numLat; lat++){
+    for(int lon = 0; lon < numLon; lon++){
+      llToXYZ(indX,indY,indZ,lat,lon);
+      x[i] = indX;
+      y[i] = indY;
+      z[i] = indZ;
+      vals[i] = nc_data["tas"][lat][lon];
+    }
+  }
+}
+
+void kdd_radius::allocateMem()
+{
+  int arrSize = numLat*numLon;
+  x = new double[arrSize];
+  y = new double[arrSize];
+  z = new double[arrSize];
+  vals = new double[arrSize];
+}
 
 void kdd_radius::runtest()
 {
+  //allocateMem();
+  //convertLLToXY();
   // Randomize Seed
   double x,y,z;
-  const double lat = 120;
-  const double lon = 125;
-  llToXYZ(x,y,z,lat,lon);
-  std::cout << "x = " << x << " y =" << y << " z =" << z << "\n";
+  // const double lat = 120;
+  // const double lon = 125;
+  // llToXYZ(x,y,z,lat,lon);
+  // std::cout << "x = " << x << " y =" << y << " z =" << z << "\n";
   srand(time(NULL));
-  kdtree_demo<float>(4);
-  kdtree_demo<double>(100000);
+  //kdtree_demo<float>(4);
+  kdtree_demo<double>(numLat*numLon);
 }
 

@@ -28,7 +28,7 @@ void StrideSearchData_LatLon::initDimensions(){
 }
 
 void StrideSearchData_LatLon::buildTree(){
-  kdd_radius* kdd = new kdd_radius(nc_data);
+  kdd_radius* kdd = new kdd_radius(nc_data, nLat, nLon);
   kdd->runtest();
 }
 
