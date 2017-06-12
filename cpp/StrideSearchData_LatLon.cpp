@@ -7,6 +7,8 @@
 #include <iostream>
 #include <sstream>
 
+namespace StrideSearch {
+
 void StrideSearchData_LatLon::initDimensions(){
     netCDF::NcFile file(filename, netCDF::NcFile::read);
     
@@ -16,13 +18,13 @@ void StrideSearchData_LatLon::initDimensions(){
     nLat = latVar.getDim(0).getSize();
     nLon = lonVar.getDim(0).getSize();
     
-    double latArr[nLat];
-    double lonArr[nLon];
+    scalar_type latArr[nLat];
+    scalar_type lonArr[nLon];
     latVar.getVar(latArr);
     lonVar.getVar(lonArr);
       
-    lats = std::vector<double>(&latArr[0], &latArr[0] + nLat);
-    lons = std::vector<double>(&lonArr[0], &lonArr[0] + nLon);
+    lats = std::vector<scalar_type>(&latArr[0], &latArr[0] + nLat);
+    lons = std::vector<scalar_type>(&lonArr[0], &lonArr[0] + nLon);
     
    nc_data = Workspace2D(variables, nLat, nLon);
 }
@@ -30,10 +32,6 @@ void StrideSearchData_LatLon::initDimensions(){
 void StrideSearchData_LatLon::buildTree(){
   kdd_radius* kdd = new kdd_radius(nc_data, nLat, nLon);
   kdd->runtest();
-}
-
-Workspace2D StrideSearchData_LatLon::getWorkspace(){
-  return nc_data;
 }
 
 void StrideSearchData_LatLon::getGridDescription(int* gridDescInts) const {
@@ -118,26 +116,26 @@ double StrideSearchData_LatLon::getDatumValue(const std::string var, const int l
     return nc_data[var][latInd][lonInd];
 }
 
-Workspace StrideSearchData_LatLon::getSectorWorkingData(const std::vector<std::string>& crit_vars, 
-        const std::vector<std::vector<int> >& dataIndices) {
-    Workspace result(crit_vars, dataIndices.size());
+Workspace1D StrideSearchData_LatLon::getSectorWorkingData(const std::vector<std::string>& crit_vars, 
+        const std::vector<ll_index_type>& dataIndices) {
+    Workspace1D result(crit_vars, dataIndices.size());
     for (int key_num = 0; key_num < crit_vars.size(); ++key_num) {
         for (int i = 0; i < dataIndices.size(); ++i) {
             result[crit_vars[key_num]][i] = 
-                nc_data[crit_vars[key_num]][dataIndices[i][0]][dataIndices[i][1]];
+                nc_data[crit_vars[key_num]][dataIndices[i].first][dataIndices[i].second];
         }
     }
     return result;
 }
 
-std::vector<std::pair<double, double> > StrideSearchData_LatLon::getLLCoordsFromIndices(
-    const std::vector<std::vector<int> >& dataIndices) const {
+std::vector<ll_coord_type > StrideSearchData_LatLon::getLLCoordsFromIndices(
+    const std::vector<ll_index_type>& dataIndices) const {
     
-    std::vector<std::pair<double, double> > result;
+    std::vector<ll_coord_type > result;
     for (int i = 0; i < dataIndices.size(); ++i) {
-        result.push_back(std::pair<double, double>(lats[dataIndices[i][0]], lons[dataIndices[i][1]]));
+        result.push_back(ll_coord_type(lats[dataIndices[i].first], lons[dataIndices[i].second]));
     }
     return result;
 }
 
-
+}

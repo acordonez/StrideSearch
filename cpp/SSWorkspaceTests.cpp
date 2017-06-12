@@ -1,3 +1,5 @@
+#include "StrideSearch_Config.h"
+#include "StrideSearch_TypeDefs.h"
 #include "StrideSearchUtilities.h"
 #include "StrideSearchWorkspace.h"
 #include <iostream>
@@ -5,12 +7,14 @@
 #include <map>
 #include <iomanip>
 
+using namespace StrideSearch;
+
 int main (int argc, char* argv[]) {
     print_copyright();
 
     std::vector<std::string> varNames = {"vorticity", "surface pressure"};
     const int nVals = 8;
-    Workspace wspc(varNames, nVals);
+    Workspace1D wspc(varNames, nVals);
     wspc["surface pressure"][1] = 990.0;
     wspc["vorticity"][0] = 0.025;
     std::cout << wspc;

@@ -4,17 +4,37 @@
 #include <sstream>
 #include <iomanip>
 
-Event::Event(const std::string dsc, const double value, const ll_coord_type ll, const DateTime dt, 
-            const indices_type ind, const std::string fname, const int tind, const Event::EventType tp) {
+namespace StrideSearch {
+
+Event::Event(const std::string dsc, const scalar_type value, const ll_coord_type ll, const DateTime dt, 
+            const vec_indices_type& locInd, const std::string fname, const index_type tind, const Event::EventType tp) {
     desc = dsc;
     val = value;
     latLon = ll;
     datetime = dt;
-    dataIndex = ind;
+    dataIndex = locInd;
     filename = fname;
     time_index = tind;
     type = tp;
     isReferenced = false;           
+}
+
+void Event::addRelated(Event* relEv) {
+    relatedEvents.push_back(relEv);
+    relEv->isReferenced = true;
+}
+
+bool Event::lowerIntensity(const Event& other) const { 
+    if (this->desc == other.desc) {
+        if (this->type == Max)
+            return this->val < other.val;
+        else 
+            return this->val > other.val;
+    }
+    else {
+        std::cerr << "Event operator < ERROR: can only compare events of same kind.\n";
+        return false;
+    }
 }
 
 std::string Event::infoString(int tabLevel) const {
@@ -47,3 +67,4 @@ bool Event::isRedundant(const Event& other, const double distThreshold) const {
     return this->desc == other.desc && this->datetime == other.datetime && this->isNear(other, distThreshold);
 }
 
+}

@@ -5,13 +5,15 @@
 #include <string>
 #include <sstream>
 
-Workspace::Workspace(std::vector<std::string> keys, const int nValsPerKey){
+namespace StrideSearch {
+
+Workspace1D::Workspace1D(std::vector<std::string> keys, const int nValsPerKey){
     for (int i = 0; i < keys.size(); ++i) {
         var_work[keys[i]] = std::vector<double>(nValsPerKey);
     }
 }
 
-Workspace2D::Workspace2D(const std::vector<std::string> var_names, const int size_dim0, const int size_dim1){
+Workspace2D::Workspace2D(const std::vector<std::string> var_names, const index_type size_dim0, const index_type size_dim1){
     dim0_size = size_dim0;
     dim1_size = size_dim1;
     std::cout << "testing" << "\n";
@@ -20,7 +22,7 @@ Workspace2D::Workspace2D(const std::vector<std::string> var_names, const int siz
     allocMemory();
 }
 
-std::ostream& operator<<(std::ostream& os, const Workspace& wspc){
+std::ostream& operator<<(std::ostream& os, const Workspace1D& wspc){
     for (auto& elem : wspc.var_work){
         os << elem.first << " = [";
         for (int i = 0; i < elem.second.size(); ++i){
@@ -122,3 +124,6 @@ Workspace2D& Workspace2D::operator=(const Workspace2D& other){
     }
     return *this;
 }
+
+}
+

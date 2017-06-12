@@ -8,6 +8,7 @@
 #include <vector> 
 #include <string>
 
+namespace StrideSearch{
 class kdd_radius
 {
  public:
@@ -25,5 +26,6 @@ class kdd_radius
   double* z;
   double* vals;
 };
+}
 
 #endif

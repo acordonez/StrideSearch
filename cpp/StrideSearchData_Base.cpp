@@ -4,6 +4,12 @@
 #include <netcdf>
 #include <map>
 
+namespace StrideSearch {
+
+std::string StrideSearchData::getFilename() const {
+    return filename;
+}
+
 void StrideSearchData::initTime(){
     std::vector<std::string> tstrings = {"time", "time_whole"};
     
@@ -11,7 +17,7 @@ void StrideSearchData::initTime(){
     
     netCDF::NcVar time_var;
     bool timeFound = false;
-    int nameInd = -1;
+    index_type nameInd = -1;
     for (int i = 0; i < tstrings.size(); ++i){
         time_var = file.getVar(tstrings[i]);
         if (!time_var.isNull()) {
@@ -25,12 +31,12 @@ void StrideSearchData::initTime(){
     fileNTimesteps = time_var.getDim(0).getSize();
     totalNTimesteps += fileNTimesteps;   
     
-    double timevals[fileNTimesteps];
-    time = std::vector<double>(fileNTimesteps, -1.0);
+    scalar_type timevals[fileNTimesteps];
+    time = std::vector<scalar_type>(fileNTimesteps, -1.0);
     time_var.getVar(timevals);
     
     std::vector<size_t> index(1,0);
-    for (int k = 0; k < fileNTimesteps; ++k) {
+    for (index_type k = 0; k < fileNTimesteps; ++k) {
         index[0] = k;
         time_var.getVar(index, &time[k]);
     }    
@@ -41,3 +47,4 @@ void StrideSearchData::updateSourceFile(std::string fname){
     initTime();
 }
 
+}

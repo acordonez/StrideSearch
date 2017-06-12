@@ -36,12 +36,16 @@
 #include "StrideSearchData_Base.h"
 #include "StrideSearchDateTime.h"
 #include "StrideSearchWorkspace.h"
+
+#include "StrideSearch_Config.h"
+#include "StrideSearch_TypeDefs.h"
 #include <vector> 
 #include <string>
 
 
 using namespace std;
 using namespace nanoflann;
+using namespace StrideSearch;
 
 int lons;
 int lats;
