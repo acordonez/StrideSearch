@@ -37,8 +37,6 @@
 #include "StrideSearchDateTime.h"
 #include "StrideSearchWorkspace.h"
 
-#include "StrideSearch_Config.h"
-#include "StrideSearch_TypeDefs.h"
 #include <vector> 
 #include <string>
 
@@ -68,10 +66,6 @@ struct PointCloud
 	// Returns the distance between the vector "p1[0:size-1]" and the data point with index "idx_p2" stored in the class:
 	inline T kdtree_distance(const T *p1, const size_t idx_p2,size_t /*size*/) const
 	{
-	  // const T d0=p1[0]-pts[idx_p2].x;
-	  // const T d1=p1[1]-pts[idx_p2].y;
-	  // const T d2=p1[2]-pts[idx_p2].z;
-	  // return d0*d0+d1*d1+d2*d2;
 	  double latA;
 	  double lonA;
 	  double latB;
@@ -110,12 +104,6 @@ void generateRandomPointCloud(PointCloud<T> &point, const size_t N, const T max_
 {
 	std::cout << "Generating "<< N << " point cloud...";
 	point.pts.resize(N);
-	// for (size_t i=0;i<N;i++)
-	// {
-	// 	point.pts[i].x = max_range * (rand() % 1000) / T(1000);
-	// 	point.pts[i].y = max_range * (rand() % 1000) / T(1000);
-	// 	point.pts[i].z = max_range * (rand() % 1000) / T(1000);
-	// }
 	int i = 0;
 	double indX, indY, indZ;
 	for(int lat = 0; lat < lats; lat++){
@@ -126,7 +114,6 @@ void generateRandomPointCloud(PointCloud<T> &point, const size_t N, const T max_
 	    point.pts[i].z = indZ;
 	    point.pts[i].vals = data_nc["tas"][lat][lon];
 	    i++;
-	    //vals[i] = nc_data["tas"][lat][lon];
 	  }
 	}
 
@@ -200,7 +187,7 @@ void kdtree_demo(const size_t N)
 
 }
 
-kdd_radius::kdd_radius(Workspace2D& data,int& nLat, int& nLon):nc_data(data)
+kdd_radius::kdd_radius(Workspace2D& data,int& nLat, int& nLon)
 {
   numLat = nLat;
   numLon = nLon;
@@ -235,16 +222,7 @@ void kdd_radius::allocateMem()
 
 void kdd_radius::runtest()
 {
-  //allocateMem();
-  //convertLLToXY();
-  // Randomize Seed
-  double x,y,z;
-  // const double lat = 120;
-  // const double lon = 125;
-  // llToXYZ(x,y,z,lat,lon);
-  // std::cout << "x = " << x << " y =" << y << " z =" << z << "\n";
   srand(time(NULL));
-  //kdtree_demo<float>(4);
   kdtree_demo<double>(numLat*numLon);
 }
 
