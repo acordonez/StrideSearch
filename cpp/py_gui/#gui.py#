@@ -1,0 +1,25 @@
+#!/usr/bin/python
+
+import Tkinter as tk
+import subprocess as sub
+
+
+
+    
+def OnButtonClick():
+    p = sub.Popen('../build/bin/ssLLDataTest.exe', stdout=sub.PIPE,stderr=sub.PIPE)
+    output, errors = p.communicate()
+    tex.insert(tk.END,output)
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("Stride Search")
+
+    tex = tk.Text()
+    tex.pack(side=tk.BOTTOM);
+    tex.see(tk.END)
+    
+    button = tk.Button(text="Run Stride Search", command=OnButtonClick)
+    button.pack()
+
+    root.mainloop()
