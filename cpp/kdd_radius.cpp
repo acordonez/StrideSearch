@@ -43,8 +43,10 @@ using namespace std;
 using namespace nanoflann;
 using namespace StrideSearch;
 
-int lons;
-int lats;
+int numLat;
+int numLon;
+std::vector<scalar_type> lons;
+std::vector<scalar_type> lats;
 const StrideSearchData* data_nc;
 
 // This is an example of a custom data set class
@@ -104,13 +106,12 @@ void generateRandomPointCloud(PointCloud<T> &point, const size_t N, const T max_
 	point.pts.resize(N);
 	int i = 0;
 	double indX, indY, indZ;
-	for(int lat = 0; lat < lats; lat++){
-	  for(int lon = 0; lon < lons; lon++){
-	    llToXYZ(indX,indY,indZ,lat,lon);
+	for(int lat = 0; lat < numLat; lat++){
+	  for(int lon = 0; lon < numLon; lon++){
+	    llToXYZ(indX,indY,indZ,lats[lat],lons[lon]);
 	    point.pts[i].x = indX;
 	    point.pts[i].y = indY;
 	    point.pts[i].z = indZ;
-	    //point.pts[i].vals = data_nc["tas"][lat][lon];
 	    i++;
 	  }
 	}
@@ -169,7 +170,7 @@ void kdtree_demo(const size_t N)
 	// ----------------------------------------------------------------
 	{
 	  //const num_t search_radius = static_cast<num_t>(0.1);
-	  const num_t search_radius = static_cast<num_t>(100);
+	  const num_t search_radius = static_cast<num_t>(150);
 	  std::vector<std::pair<size_t,num_t> >   ret_matches;
 	  
 	  nanoflann::SearchParams params;
@@ -185,37 +186,13 @@ void kdtree_demo(const size_t N)
 
 }
 
-kdd_radius::kdd_radius(const StrideSearchData* data)
-{
-  // numLat = nLat;
-  //numLon = nLon;
-  lats = data->lats.size();
-  lons = data->lons.size();
-  data_nc = data;
-}
 
-void kdd_radius::convertLLToXY()
+kdd_radius::kdd_radius(std::vector<scalar_type> lat, std::vector<scalar_type> lon)
 {
-  int i = 0; 
-  double indX, indY, indZ;
-  for(int lat = 0; lat < numLat; lat++){
-    for(int lon = 0; lon < numLon; lon++){
-      llToXYZ(indX,indY,indZ,lat,lon);
-      x[i] = indX;
-      y[i] = indY;
-      z[i] = indZ;
-      //vals[i] = nc_data["tas"][lat][lon];
-    }
-  }
-}
-
-void kdd_radius::allocateMem()
-{
-  int arrSize = numLat*numLon;
-  x = new double[arrSize];
-  y = new double[arrSize];
-  z = new double[arrSize];
-  vals = new double[arrSize];
+  numLat = lat.size();
+  numLon = lon.size();
+  lons = lon;
+  lats = lat;
 }
 
 void kdd_radius::runtest()

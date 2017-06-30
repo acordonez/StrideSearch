@@ -23,6 +23,8 @@ class StrideSearchDataLatLon : public StrideSearchData {
         
         /// Return an integer array = [nLat, nLon]
         void getGridDescription(index_type* gridDescInts) const;
+
+	void BuildKDTree()const;
         
         /// Return a string with basic information from the data file.
         std::string basicInfo() const;
