@@ -35,8 +35,6 @@
 #include "kdd_radius.h"
 #include "StrideSearchData_Base.h"
 #include "StrideSearchDateTime.h"
-#include "StrideSearchWorkspace.h"
-
 #include <vector> 
 #include <string>
 
@@ -47,7 +45,7 @@ using namespace StrideSearch;
 
 int lons;
 int lats;
-Workspace2D data_nc;
+const StrideSearchData* data_nc;
 
 // This is an example of a custom data set class
 template <typename T>
@@ -112,7 +110,7 @@ void generateRandomPointCloud(PointCloud<T> &point, const size_t N, const T max_
 	    point.pts[i].x = indX;
 	    point.pts[i].y = indY;
 	    point.pts[i].z = indZ;
-	    point.pts[i].vals = data_nc["tas"][lat][lon];
+	    //point.pts[i].vals = data_nc["tas"][lat][lon];
 	    i++;
 	  }
 	}
@@ -187,12 +185,12 @@ void kdtree_demo(const size_t N)
 
 }
 
-kdd_radius::kdd_radius(Workspace2D& data,int& nLat, int& nLon)
+kdd_radius::kdd_radius(const StrideSearchData* data)
 {
-  numLat = nLat;
-  numLon = nLon;
-  lats = nLat;
-  lons = nLon;
+  // numLat = nLat;
+  //numLon = nLon;
+  lats = data->lats.size();
+  lons = data->lons.size();
   data_nc = data;
 }
 
@@ -206,7 +204,7 @@ void kdd_radius::convertLLToXY()
       x[i] = indX;
       y[i] = indY;
       z[i] = indZ;
-      vals[i] = nc_data["tas"][lat][lon];
+      //vals[i] = nc_data["tas"][lat][lon];
     }
   }
 }

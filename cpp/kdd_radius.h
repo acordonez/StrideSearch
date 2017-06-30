@@ -4,7 +4,6 @@
 #include "StrideSearchUtilities.h"
 #include "StrideSearchData_Base.h"
 #include "StrideSearchDateTime.h"
-#include "StrideSearchWorkspace.h"
 #include <vector> 
 #include <string>
 
@@ -12,13 +11,13 @@ namespace StrideSearch{
 class kdd_radius
 {
  public:
-  kdd_radius(Workspace2D& data, int& nLat, int& nLon);
+  kdd_radius(const StrideSearchData* data);
   void runtest();
   void convertLLToXY();
   void allocateMem();
 
  protected:
-  Workspace2D nc_data;
+  StrideSearchData* nc_data;
   int numLat;
   int numLon;
   double* x;
