@@ -42,7 +42,11 @@ void StrideSearchDataLatLon::getGridDescription(int* gridDescInts) const {
 
 void StrideSearchDataLatLon::BuildKDTree() const {
   kdd_radius* kd = new kdd_radius(lats,lons);
-  kd->runtest();
+  double center = .5;
+  for(int i = 0; i< 10; i++){
+    kd->runtest(166,center);
+    center += 2.5;
+  }
 }
 
 std::string StrideSearchDataLatLon::basicInfo() const {

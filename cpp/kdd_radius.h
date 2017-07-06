@@ -12,7 +12,8 @@ class kdd_radius
 {
  public:
   kdd_radius(std::vector<scalar_type> lat, std::vector<scalar_type> lon);
-  void runtest();
+  void runtest(int radius, double center);
+  int treeBuilt = 0;
 
  protected:
   //std::vector<scalar_type> lons;

@@ -26,7 +26,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *************************************************************************/
 
-#include "nanoflann/include/nanoflann.hpp"
+#include <nanoflann.hpp>
 
 #include <ctime>
 #include <cstdlib>
@@ -45,6 +45,7 @@ using namespace StrideSearch;
 
 int numLat;
 int numLon;
+int treeBuilt = 0;
 std::vector<scalar_type> lons;
 std::vector<scalar_type> lats;
 const StrideSearchData* data_nc;
@@ -99,6 +100,8 @@ struct PointCloud
 
 };
 
+PointCloud <double> cloud;
+
 template <typename T>
 void generateRandomPointCloud(PointCloud<T> &point, const size_t N, const T max_range = 10)
 {
@@ -115,17 +118,16 @@ void generateRandomPointCloud(PointCloud<T> &point, const size_t N, const T max_
 	    i++;
 	  }
 	}
-
+	treeBuilt = 1;
 	std::cout << "done\n";
 }
 
 template <typename num_t>
-void kdtree_demo(const size_t N)
+void kdtree_demo(const size_t N, int radius, double center)
 {
-	PointCloud<num_t> cloud;
 
 	// Generate points:
-	generateRandomPointCloud(cloud, N);
+	if(!treeBuilt) generateRandomPointCloud(cloud, N);
 
 	// construct a kd-tree index:
 	typedef KDTreeSingleIndexAdaptor<
@@ -143,7 +145,7 @@ void kdtree_demo(const size_t N)
 	index.buildIndex();
 #endif
 
-	const num_t query_pt[3] = { 0.5, 0.5, 0.5};
+	const num_t query_pt[3] = {center, 0.5, 0.5};
 
 	// ----------------------------------------------------------------
 	// knnSearch():  Perform a search for the N closest points
@@ -154,7 +156,7 @@ void kdtree_demo(const size_t N)
 		std::vector<num_t> out_dist_sqr(num_results);
 
 		num_results = index.knnSearch(&query_pt[0], num_results, &ret_index[0], &out_dist_sqr[0]);
-		
+	
 		// In case of less points in the tree than requested:
 		ret_index.resize(num_results);
 		out_dist_sqr.resize(num_results);
@@ -169,8 +171,8 @@ void kdtree_demo(const size_t N)
 	// radiusSearch():  Perform a search for the N closest points
 	// ----------------------------------------------------------------
 	{
-	  //const num_t search_radius = static_cast<num_t>(0.1);
-	  const num_t search_radius = static_cast<num_t>(150);
+	  //const num_t search_radius = static_cast<num_t>(0.1)
+	  const num_t search_radius = static_cast<num_t>(radius);
 	  std::vector<std::pair<size_t,num_t> >   ret_matches;
 	  
 	  nanoflann::SearchParams params;
@@ -183,9 +185,7 @@ void kdtree_demo(const size_t N)
 	    cout << "idx["<< i << "]=" << ret_matches[i].first << " dist["<< i << "]=" << ret_matches[i].second << endl;
 	    cout << "\n";
 	}
-
 }
-
 
 kdd_radius::kdd_radius(std::vector<scalar_type> lat, std::vector<scalar_type> lon)
 {
@@ -195,9 +195,9 @@ kdd_radius::kdd_radius(std::vector<scalar_type> lat, std::vector<scalar_type> lo
   lats = lat;
 }
 
-void kdd_radius::runtest()
+void kdd_radius::runtest(int radius, double center)
 {
   srand(time(NULL));
-  kdtree_demo<double>(numLat*numLon);
+  kdtree_demo<double>(numLat*numLon,radius,center);
 }
 
