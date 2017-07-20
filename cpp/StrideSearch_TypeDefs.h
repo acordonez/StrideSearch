@@ -10,6 +10,8 @@
 
 namespace StrideSearch {
 
+  class PointCloud;
+
     /// Real number type
     typedef double scalar_type;
     
@@ -23,7 +25,10 @@ namespace StrideSearch {
     typedef std::vector<index_type> vec_indices_type;
     
 #ifdef USE_NANOFLANN
+    //#include "kdd_radius.h"
 
+    typedef StrideSearch::PointCloud cloud_type;
+    typedef nanoflann::KDTreeSingleIndexAdaptor<nanoflann::L2_Simple_Adaptor<scalar_type, cloud_type > ,cloud_type,3 /* dim */> my_kd_tree_t;
 #endif
 }
 

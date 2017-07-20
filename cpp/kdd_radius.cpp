@@ -26,17 +26,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *************************************************************************/
 
-#include <nanoflann.hpp>
-
+#include "nanoflann.hpp"
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
-#include "StrideSearchUtilities.h"
 #include "kdd_radius.h"
-#include "StrideSearchData_Base.h"
-#include "StrideSearchDateTime.h"
-#include <vector> 
-#include <string>
+#include "StrideSearch_TypeDefs.h"
 
 
 using namespace std;
@@ -48,62 +43,64 @@ int numLon;
 int treeBuilt = 0;
 std::vector<scalar_type> lons;
 std::vector<scalar_type> lats;
-const StrideSearchData* data_nc;
+cloud_type cloud;
+//kdd_radius::PointCloud pointCloud;
+//kdd_radius::PointCloud cloud;
 
 // This is an example of a custom data set class
-template <typename T>
-struct PointCloud
-{
-	struct Point
-	{
-	  T  x,y,z,vals;
-	};
+// template <typename T>
+// struct PointCloud
+// {
+// 	struct Point
+// 	{
+// 	  T  x,y,z,vals;
+// 	};
 
-	std::vector<Point>  pts;
+// 	std::vector<Point>  pts;
 
-	// Must return the number of data points
-	inline size_t kdtree_get_point_count() const { return pts.size(); }
+// 	// Must return the number of data points
+// 	inline size_t kdtree_get_point_count() const { return pts.size(); }
 
-	// Returns the distance between the vector "p1[0:size-1]" and the data point with index "idx_p2" stored in the class:
-	inline T kdtree_distance(const T *p1, const size_t idx_p2,size_t /*size*/) const
-	{
-	  double latA;
-	  double lonA;
-	  double latB;
-	  double lonB;
-	  const T d0A = p1[0];
-	  const T d1A = p1[1];
-	  const T d2A = p1[2];
-	  const T d0B = pts[idx_p2].x;
-	  const T d1B = pts[idx_p2].y;
-	  const T d2B = pts[idx_p2].z;
-	  XyzToLL(latA,lonA,d0A,d1A,d2A);
-	  XyzToLL(latB,lonB,d0B,d1B,d2B);
-	  return sphereDistance(latA,lonA,latB,lonB);
-	}
+// 	// Returns the distance between the vector "p1[0:size-1]" and the data point with index "idx_p2" stored in the class:
+// 	inline
 
-	// Returns the dim'th component of the idx'th point in the class:
-	// Since this is inlined and the "dim" argument is typically an immediate value, the
-	//  "if/else's" are actually solved at compile time.
-	inline T kdtree_get_pt(const size_t idx, int dim) const
-	{
-		if (dim==0) return pts[idx].x;
-		else if (dim==1) return pts[idx].y;
-		else return pts[idx].z;
-	}
+//T kdtree_distance(const T *p1, const size_t idx_p2,size_t /*size*/) const
+// 	{
+// 	  double latA;
+// 	  double lonA;
+// 	  double latB;
+// 	  double lonB;
+// 	  const T d0A = p1[0];
+// 	  const T d1A = p1[1];
+// 	  const T d2A = p1[2];
+// 	  const T d0B = pts[idx_p2].x;
+// 	  const T d1B = pts[idx_p2].y;
+// 	  const T d2B = pts[idx_p2].z;
+// 	  XyzToLL(latA,lonA,d0A,d1A,d2A);
+// 	  XyzToLL(latB,lonB,d0B,d1B,d2B);
+// 	  return sphereDistance(latA,lonA,latB,lonB);
+// 	}
 
-	// Optional bounding-box computation: return false to default to a standard bbox computation loop.
-	//   Return true if the BBOX was already computed by the class and returned in "bb" so it can be avoided to redo it again.
-	//   Look at bb.size() to find out the expected dimensionality (e.g. 2 or 3 for point clouds)
-	template <class BBOX>
-	bool kdtree_get_bbox(BBOX& /*bb*/) const { return false; }
+// 	// Returns the dim'th component of the idx'th point in the class:
+// 	// Since this is inlined and the "dim" argument is typically an immediate value, the
+// 	//  "if/else's" are actually solved at compile time.
+// 	inline T kdtree_get_pt(const size_t idx, int dim) const
+// 	{
+// 		if (dim==0) return pts[idx].x;
+// 		else if (dim==1) return pts[idx].y;
+// 		else return pts[idx].z;
+// 	}
 
-};
+// 	// Optional bounding-box computation: return false to default to a standard bbox computation loop.
+// 	//   Return true if the BBOX was already computed by the class and returned in "bb" so it can be avoided to redo it again.
+// 	//   Look at bb.size() to find out the expected dimensionality (e.g. 2 or 3 for point clouds)
+// 	template <class BBOX>
+// 	bool kdtree_get_bbox(BBOX& /*bb*/) const { return false; }
 
-PointCloud <double> cloud;
+// };
 
-template <typename T>
-void generateRandomPointCloud(PointCloud<T> &point, const size_t N, const T max_range = 10)
+
+void generateRandomPointCloud(kdd_radius::PointCloud &point, const size_t N)
 {
 	std::cout << "Generating "<< N << " point cloud...";
 	point.pts.resize(N);
@@ -130,11 +127,11 @@ void kdtree_demo(const size_t N, int radius, double center)
 	if(!treeBuilt) generateRandomPointCloud(cloud, N);
 
 	// construct a kd-tree index:
-	typedef KDTreeSingleIndexAdaptor<
-		L2_Simple_Adaptor<num_t, PointCloud<num_t> > ,
-		PointCloud<num_t>,
-		3 /* dim */
-		> my_kd_tree_t;
+	 typedef KDTreeSingleIndexAdaptor<
+                 L2_Simple_Adaptor<num_t, kdd_radius::PointCloud > ,
+	 	kdd_radius::PointCloud,
+	 	3 /* dim */
+	 	> my_kd_tree_t;
 
 	my_kd_tree_t   index(3 /*dim*/, cloud, KDTreeSingleIndexAdaptorParams(10 /* max leaf */) );
 	index.buildIndex();
@@ -198,6 +195,7 @@ kdd_radius::kdd_radius(std::vector<scalar_type> lat, std::vector<scalar_type> lo
 void kdd_radius::runtest(int radius, double center)
 {
   srand(time(NULL));
+  
   kdtree_demo<double>(numLat*numLon,radius,center);
 }
 
