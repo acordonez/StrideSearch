@@ -1,5 +1,5 @@
-#include "LpmConfig.h"
-#include "LpmTypeDefs.h"
+#include "StrideSearch_Config.h"
+#include "StrideSearch_TypeDefs.h"
 #include "LpmOutputMessage.h"
 #include "LpmLogger.h"
 #include "LpmEuclideanCoords.h"

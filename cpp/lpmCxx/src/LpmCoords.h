@@ -1,8 +1,8 @@
 #ifndef _LPM_COORDS_BASE_H_
 #define _LPM_COORDS_BASE_H_
 
-#include "LpmConfig.h"
-#include "LpmTypeDefs.h"
+#include "StrideSearch_Config.h"
+#include "StrideSearch_TypeDefs.h"
 #include "LpmXyzVector.h"
 #include "LpmLogger.h"
 #include <memory>

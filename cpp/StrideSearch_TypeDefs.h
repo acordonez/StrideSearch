@@ -16,7 +16,7 @@ namespace StrideSearch {
     typedef double scalar_type;
     
     /// Memory index type
-    typedef int index_type;
+    typedef long index_type;
 
     /// Latitude-Longitude coordinate pair type
     typedef std::pair<scalar_type, scalar_type> ll_coord_type;

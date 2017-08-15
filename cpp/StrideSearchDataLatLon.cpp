@@ -34,7 +34,7 @@ std::string StrideSearchDataLatLon::infoString() const {
     return ss.str();
 }
 
-void StrideSearchDataLatLon::getGridDescription(int* gridDescInts) const {
+void StrideSearchDataLatLon::getGridDescription(index_type* gridDescInts) const {
     gridDescInts[0] = nLat;
     gridDescInts[1] = nLon;
 }

@@ -1,3 +1,4 @@
+
 cmake_minimum_required(VERSION 2.8)
 
 #
@@ -5,6 +6,7 @@ cmake_minimum_required(VERSION 2.8)
 #
 PROJECT(StrideSearch)
 INCLUDE_DIRECTORIES(.)
+INCLUDE_DIRECTORIES(./lpmCxx/src/)
 SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
 SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib )
@@ -121,7 +123,9 @@ ADD_LIBRARY(strideSearch StrideSearchUtilities.cpp StrideSearchDateTime.cpp Stri
             StrideSearchSector.cpp StrideSearchWorkspaceDict.cpp StrideSearchIDCriterion_Base.cpp
             StrideSearchMinMaxCriteria.cpp StrideSearchSectorList_Base.cpp StrideSearchSectorListLatLon.cpp
             StrideSearchData_Base.cpp StrideSearchDataLatLon.cpp StrideSearchEventList.cpp
-            StrideSearchCollocationCriteria.cpp
+            StrideSearchCollocationCriteria.cpp ./lpmCxx/src/LpmLogger.cpp ./lpmCxx/src/LpmOutputMessage.cpp
+	    ./lpmCxx/src/LpmEuclideanCoords.cpp ./lpmCxx/src/LpmSphericalCoords.cpp ./lpmCxx/src/LpmBox3d.cpp
+	    ./lpmCxx/src/LpmOctree.cpp ./lpmCxx/src/LpmCoords.cpp ./lpmCxx/src/LpmXyzVector.cpp
             )
 
 #FILE(GLOB STRIDE_SEARCH_CPP_FILES ${PROJECT_SOURCE_DIR}/*.cpp)
@@ -165,6 +169,9 @@ ADD_EXECUTABLE(ssDataLatLonUnitTest.exe SSDataLatLonUnitTest.cpp)
 TARGET_LINK_LIBRARIES(ssDataLatLonUnitTest.exe strideSearch)
 ADD_TEST(NAME ssDataLatLonUnitTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssDataLatLonUnitTest.exe)
 
+ADD_EXECUTABLE(ssUnstructuredTest.exe StrideSearchDataUnstructured.cpp)
+TARGET_LINK_LIBRARIES(ssUnstructuredTest.exe strideSearch)
+ADD_TEST(NAME ssUnstructuredTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssUnstructured.exe)
 
 #ADD_EXECUTABLE(ssWorkspaceTest.exe SSWorkspaceTests.cpp)
 #TARGET_LINK_LIBRARIES(ssWorkspaceTest.exe strideSearch)

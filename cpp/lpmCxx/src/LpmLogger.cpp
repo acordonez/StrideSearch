@@ -11,6 +11,7 @@
  */
 
 #include "LpmLogger.h"
+#include "StrideSearch_TypeDefs.h"
 #include <sstream>
 
 using std::cout;

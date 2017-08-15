@@ -12,8 +12,8 @@
 	@brief OutputMessage header file. Defines OutputMessage and LongMessage classes.
 	@author Peter Bosler <pabosle@sandia.gov>
  */
-#include "LpmTypeDefs.h"
-#include "LpmConfig.h"
+#include "StrideSearch_Config.h"
+#include "StrideSearch_TypeDefs.h"
 #include <string>
 #include <iostream>
 #include <vector>

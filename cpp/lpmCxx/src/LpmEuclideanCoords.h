@@ -6,8 +6,8 @@
 #include <vector>
 #include "LpmXyzVector.h"
 #include "LpmCoords.h"
-#include "LpmConfig.h"
-#include "LpmTypeDefs.h"
+#include "StrideSearch_Config.h"
+#include "StrideSearch_TypeDefs.h"
 
 namespace Lpm {
 

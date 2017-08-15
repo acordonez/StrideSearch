@@ -1,7 +1,7 @@
 #ifndef _LPM_ANALYTIC_FUNCTION_H_
 #define _LPM_ANALYTIC_FUNCTION_H_
 
-#include "LpmConfig.h"
+#include "StrideSearch_Config.h"
 #include "LpmTypeDefs.h"
 #include "LpmXyzVector.h"
 #include <cmath>

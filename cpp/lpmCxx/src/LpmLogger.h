@@ -13,7 +13,7 @@
 	@author Peter Bosler <pabosle@sandia.gov>
  */
 #include "LpmTypeDefs.h"
-#include "LpmConfig.h"
+#include "StrideSearch_Config.h"
 #include <iostream>
 #include "LpmOutputMessage.h"
 #include <vector>

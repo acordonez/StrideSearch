@@ -2,7 +2,7 @@
 #define __LPM_XyzVector__
 
 #include "LpmTypeDefs.h"
-#include "LpmConfig.h"
+#include "StrideSearch_Config.h"
 #include <iostream>
 #include <cmath>
 #include <vector>
