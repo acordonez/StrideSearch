@@ -1,5 +1,4 @@
 #include "StrideSearchDataLatLon.h"
-#include "kdd_radius.h"
 #include <netcdf>
 #include <iostream>
 #include <sstream>
@@ -41,12 +40,6 @@ void StrideSearchDataLatLon::getGridDescription(int* gridDescInts) const {
 }
 
 void StrideSearchDataLatLon::BuildKDTree() const {
-  kdd_radius* kd = new kdd_radius(lats,lons);
-  double center = .5;
-  for(int i = 0; i< 10; i++){
-    kd->runtest(166,center);
-    center += 2.5;
-  }
 }
 
 std::string StrideSearchDataLatLon::basicInfo() const {

@@ -1,0 +1,1 @@
+/opt/openmpi/2.0/intel/bin/mpicxx   --std=c++11 -g   -Wl,-rpath  -Wl,/opt/openmpi/2.0/intel/lib  -Wl,--enable-new-dtags   CMakeFiles/lpmMeshSeedUnitTest.exe.dir/LpmMeshSeedUnitTests.cpp.o  -o lpmMeshSeedUnitTest.exe -rdynamic ../src/liblpm.a 
