@@ -128,6 +128,9 @@ ADD_LIBRARY(strideSearch StrideSearchUtilities.cpp StrideSearchDateTime.cpp Stri
 	    ./lpmCxx/src/LpmOctree.cpp ./lpmCxx/src/LpmCoords.cpp ./lpmCxx/src/LpmXyzVector.cpp
             )
 
+SET(CMAKE_INSTALL_RPATH "/opt/openmpi/1.10/gnu/lib/")
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 #FILE(GLOB STRIDE_SEARCH_CPP_FILES ${PROJECT_SOURCE_DIR}/*.cpp)
 #ADD_LIBRARY(strideSearch ${STRIDE_SEARCH_CPP_FILES})
 ##TARGET_INCLUDE_DIRECTORIES(strideSearch PUBLIC ${})
