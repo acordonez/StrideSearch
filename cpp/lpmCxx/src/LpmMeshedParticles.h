@@ -1,7 +1,7 @@
 #ifndef _LPM_MESHED_PARTICLES_H_
 #define _LPM_MESHED_PARTICLES_H_
 
-#include "LpmConfig.h"
+#include "StrideSearch_Config.h"
 #include "LpmTypeDefs.h"
 #include "LpmParticles.h"
 #include "LpmPolyMesh2d.h"

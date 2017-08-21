@@ -1,10 +1,9 @@
 #ifndef _LPM_TAYLOR_SERIES_3D_H_
 #define _LPM_TAYLOR_SERIES_3D_H_
 
-#include "LpmConfig.h"
+#include "StrideSearch_Config.h"
 #include "LpmTypeDefs.h"
 #include "LpmXyzVector.h"
-#include "LpmConfig.h"
 #include "LpmTypeDefs.h"
 #include "LpmXyzVector.h"
 #include "LpmMultiIndex.h"

@@ -1,7 +1,7 @@
 #ifndef _LPM_MESH_SEED_H_
 #define _LPM_MESH_SEED_H_
 
-#include "LpmConfig.h"
+#include "StrideSearch_Config.h"
 #include "LpmTypeDefs.h"
 #include "LpmFaces.h"
 #include "LpmEdges.h"

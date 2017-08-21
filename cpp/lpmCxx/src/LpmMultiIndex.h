@@ -1,7 +1,7 @@
 #ifndef _LPM_MULTI_INDEX_H_
 #define _LPM_MULTI_INDEX_H_
 
-#include "LpmConfig.h"
+#include "StrideSearch_Config.h"
 #include "LpmTypeDefs.h"
 #include "LpmXyzVector.h"
 #include <cmath>

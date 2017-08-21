@@ -123,10 +123,17 @@ ADD_LIBRARY(strideSearch StrideSearchUtilities.cpp StrideSearchDateTime.cpp Stri
             StrideSearchSector.cpp StrideSearchWorkspaceDict.cpp StrideSearchIDCriterion_Base.cpp
             StrideSearchMinMaxCriteria.cpp StrideSearchSectorList_Base.cpp StrideSearchSectorListLatLon.cpp
             StrideSearchData_Base.cpp StrideSearchDataLatLon.cpp StrideSearchEventList.cpp
-            StrideSearchCollocationCriteria.cpp ./lpmCxx/src/LpmLogger.cpp ./lpmCxx/src/LpmOutputMessage.cpp
-	    ./lpmCxx/src/LpmEuclideanCoords.cpp ./lpmCxx/src/LpmSphericalCoords.cpp ./lpmCxx/src/LpmBox3d.cpp
-	    ./lpmCxx/src/LpmOctree.cpp ./lpmCxx/src/LpmCoords.cpp ./lpmCxx/src/LpmXyzVector.cpp
+            StrideSearchCollocationCriteria.cpp ./lpmCxx/src/LpmXyzVector.cpp 
+	    ./lpmCxx/src/LpmOutputMessage.cpp ./lpmCxx/src/LpmLogger.cpp ./lpmCxx/src/LpmCoords.cpp 
+	    ./lpmCxx/src/LpmEuclideanCoords.cpp ./lpmCxx/src/LpmSphericalCoords.cpp ./lpmCxx/src/LpmField.cpp
+	    ./lpmCxx/src/LpmEdges.cpp ./lpmCxx/src/LpmFaces.cpp ./lpmCxx/src/LpmTriFaces.cpp 
+	    ./lpmCxx/src/LpmQuadFaces.cpp ./lpmCxx/src/LpmMeshSeed.cpp ./lpmCxx/src/LpmPolyMesh2d.cpp 
+	    ./lpmCxx/src/LpmVtkFileIO.cpp ./lpmCxx/src/LpmParticles.cpp ./lpmCxx/src/LpmMeshedParticles.cpp 
+	    ./lpmCxx/src/LpmMPIReplicatedData.cpp ./lpmCxx/src/LpmTimer.cpp ./lpmCxx/src/LpmDirectSum.cpp 
+	    ./lpmCxx/src/LpmBox3d.cpp ./lpmCxx/src/LpmOctree.cpp ./lpmCxx/src/LpmTaylorSeries3d.cpp
+	    ./lpmCxx/src/LpmTreeSum.cpp 
             )
+
 
 SET(CMAKE_INSTALL_RPATH "/opt/openmpi/1.10/gnu/lib/")
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)

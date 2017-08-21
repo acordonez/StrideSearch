@@ -1,7 +1,7 @@
 #ifndef _LPM_PARTICLES_H_
 #define _LPM_PARTICLES_H_
 
-#include "LpmConfig.h"
+#include "StrideSearch_Config.h"
 #include "LpmTypeDefs.h"
 #include "LpmCoords.h"
 #include "LpmField.h"

@@ -1,7 +1,7 @@
 #ifndef _LPM_DIRECT_SUM_H_
 #define _LPM_DIRECT_SUM_H_
 
-#include "LpmConfig.h"
+#include "StrideSearch_Config.h"
 #include "LpmTypeDefs.h"
 #include "LpmXyzVector.h"
 #include "LpmAnalyticFunctions.h"

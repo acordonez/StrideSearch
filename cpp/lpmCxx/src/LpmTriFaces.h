@@ -1,7 +1,7 @@
 #ifndef _LPM_TRI_FACES_H_
 #define _LPM_TRI_FACES_H_
 
-#include "LpmConfig.h"
+#include "StrideSearch_Config.h"
 #include "LpmTypeDefs.h"
 #include "LpmFaces.h"
 

@@ -1,7 +1,7 @@
 #ifndef _LPM_MPI_REPLICATED_DATA_H_
 #define _LPM_MPI_REPLICATED_DATA_H_
 
-#include "LpmConfig.h"
+#include "StrideSearch_Config.h"
 #include "LpmTypeDefs.h"
 #include <vector>
 #include <string>

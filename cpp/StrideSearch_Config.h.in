@@ -5,3 +5,4 @@
 #cmakedefine USE_NANOFLANN
 
 #define StrideSearch_TEST_DATA_DIR "@CMAKE_CURRENT_SOURCE_DIR@/../testData"
+#define LPM_MESH_SEED_DIR "@CMAKE_CURRENT_SOURCE_DIR@/meshSeeds"

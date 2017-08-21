@@ -1,7 +1,7 @@
 #ifndef _LPM_HEADER_TEMPLATE_H_
 #define _LPM_HEADER_TEMPLATE_H_
 
-#include "LpmConfig.h"
+#include "StrideSearch_Config.h"
 #include "LpmTypeDefs.h"
 #include "LpmXyzVector.h"
 #include <cmath>

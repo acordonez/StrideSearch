@@ -1,7 +1,7 @@
 #ifndef _LPM_TIMER_H_
 #define _LPM_TIMER_H_
 
-#include "LpmConfig.h"
+#include "StrideSearch_Config.h"
 #include "LpmTypeDefs.h"
 #include <mpi.h>
 #include <string>
