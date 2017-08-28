@@ -7,6 +7,9 @@
 #include "LpmBox3d.h"
 #include "LpmOctree.h"
 #include "LpmXyzVector.h"
+
+#include "StrideSearchDataLatLon.h"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -19,136 +22,67 @@ using namespace Lpm;
 using namespace StrideSearch;
 
 int main(int argc, char* argv[]){
-  std::unique_ptr<Logger> log(new Logger(OutputMessage::debugPriority));
-  {
-    std::stringstream ss;
-    ss << "Test info: \n \t title: " << "Octree unit tests" << std::endl;
-    ss << "\t objecties: " << std::endl;
-    ss << "\t 1. Verify basic Treenode class functions" << std::endl;
-    ss << "\t 2. Verify basic Treenode class functions" << std::endl;
-    ss << "\t 3. Generate 3d octree for Cartesian points" << std::endl;
-    ss << "\t 4. Generate 3d octree for spherical points" << std::endl;
-    OutputMessage introMsg(ss.str(), OutputMessage::tracePriority, "main");
-    log->logMessage(introMsg);
-  }
-  {
-    Box3d unitBox(-1,1,-1,1,-1,1);
-    std::cout << "Unit Box : " << unitBox.infoString();
-    std::cout << "\tvolume = " << unitBox.volume() << std::endl;
-    std::cout << "\tcentroid = " << unitBox.centroid() << std::endl;
-    std::cout << "\tcontains origin ? : " << (unitBox.containsPoint(XyzVector(0,0,0)) ? "true" : "false") << std::endl;
-    std::cout << "\tlongestEdge = " << unitBox.longestEdge() << std::endl;
-    std::cout << "\tshortestEdge = " << unitBox.shortestEdge() << std::endl;
-    std::cout << "\taspectRatio = " << unitBox.aspectRatio() << std::endl;
+  const std::string testfilename = "sresa1b_ncar_ccsm3-example.nc";
+  std::string file = StrideSearch_TEST_DATA_DIR;
+  file += "/";
+  file += testfilename;
+  std::cout << "looking for file : " << file << std::endl;
   
-    std::vector<Box3d> kids = unitBox.bisectAll();
-    for(int i = 0; i < 8; ++i){
-      std::cout << "child " << i << ": " << kids[i].infoString();
-    }
-
-    Box3d boxCopy(kids[1]);
-    std::cout << "BoxCopy " << boxCopy.infoString();
-    Box3d boxAssign = boxCopy;
-    std::cout << "BoxAssign " << boxAssign.infoString();
+  const std::string uvarname = "ua";
+  const std::string tempvarname = "tas";
+  const std::string precipvarname = "pr";
   
+  StrideSearchDataLatLon ssData(file);
+  const int nMax = ssData.lats.size()*ssData.lons.size();
+  //std::shared_ptr<SphericalCoords> sc(new SphericalCoords(nMax));
+  std::shared_ptr<SphericalCoords> sc(new SphericalCoords(nMax));
+  
+  GeometryType geom = sc->geometry();
+  std::cout << "geometry: " << geom << std::endl;
+  switch (geom){
+  case PLANAR_GEOMETRY : {
+    std::cout << "planar geometry";
+    break;
   }
-  {
-    const int nMax = 8000;
-    const scalar_type domainRadius = 2.0;
-
-    std::shared_ptr<EuclideanCoords> ec(new EuclideanCoords(nMax, CARTESIAN_3D_GEOMETRY));
-    GeometryType geom = ec->geometry();
-    std::cout << "geometry: " << geom << std::endl;
-    switch(geom){
-      case PLANAR_GEOMETRY : {
-	std::cout << "planar geometry";
-	break;
-      }
-      case SPHERICAL_SURFACE_GEOMETRY : {
-	std::cout << "spherical surface geometry";
-	break;
-      }
-      case CARTESIAN_3D_GEOMETRY : {
-	std::cout << "Cartesian 3D geometry";
-      }
-    }
-    std::cout << std::endl;
-
-    ec->initRandom(false,domainRadius);
-    std::ofstream cfile("octreeCoords.txt");
-    ec->writeCoordsCSV(cfile);
-    cfile.close();
-
-    const scalar_type maxAspectRatio = 1.5;
-    std::shared_ptr<Tree> tree(new Tree(ec, maxAspectRatio));
-    std::cout << "tree info: " << tree->infoString();
-
-    const int nCoordsPerNode = 10;
-    std::cout << "calling generateTree..." << std::endl;
-    tree->buildTree(nCoordsPerNode);
-    std::cout << "returned from generateTree:" << std::endl;
-    std::cout << "\t nNodes = " << tree ->nNodes() << std::endl;
-    std::cout << "\t treeDepth = " << tree->depth() << std::endl;
-
-    const std:: string fname("octreeUnitTest.vtk");
-    std::stringstream ss;
-    ss << "nCoords =" << nMax << ", nCoordsPerNode = " << nCoordsPerNode;
-    tree->writeToVtk(fname,ss.str());
-    tree->sphere = Sphere(25000,1,1,1);
-    std::cout<<"Running radius search...\n";
-    tree->radiusSearch();
-    std::cout<<"Number of points found within radius of " << tree->sphere.radius << ": " << tree->nodes << "\n";
-    tree->nodes = 0;
+  case SPHERICAL_SURFACE_GEOMETRY : {
+    std::cout << "spherical surface geometry";
   }
-  {
-    const int nMax = 25000;
-    std::shared_ptr<SphericalCoords> sc(new SphericalCoords(nMax));
-    GeometryType geom = sc->geometry();
-    std::cout << "geometry: " << geom << std::endl;
-    switch (geom){
-      case PLANAR_GEOMETRY : {
-	std::cout << "planar geometry";
-	break;
-      }
-      case SPHERICAL_SURFACE_GEOMETRY : {
-	std::cout << "spherical surface geometry";
-      }
-      case CARTESIAN_3D_GEOMETRY : {
-	std::cout << "Cartesian 3D geometry";
-      }
-    }
-    std::cout << std::endl;
-
-    sc->initRandom();
-    
-    std::ofstream cfile("octreeSphereCoords.txt");
-    sc->writeCoordsCSV(cfile);
-    cfile.close();
-    
-    const scalar_type maxAspectRatio = 2.0;
-
-    std::shared_ptr<Tree> tree(new Tree(sc, maxAspectRatio));
-    std::cout << tree->infoString();
-
-    const int nCoordsPerNode = 20;
-
-    tree->buildTree(nCoordsPerNode);
-    std::cout << "returned from generateTree:" << std::endl;
-    std::cout << "\t nNodes = " << tree->nNodes() << std:: endl;
-    std::cout << "\n nRecursiveNodes " << tree->recursiveNNodes() <<std::endl;
-    std::cout << "\t treeDepth = " << tree->depth() << std::endl;
-
-    std::cout << tree->infoString();
-
-    const std::string fname("sphereOctreeUnitTest.vtk");
-    std::stringstream ss;
-    ss << "nCoords = " << nMax << ", nCoordsPerNode = " << nCoordsPerNode;
-    tree->writeToVtk(fname, ss.str());
-    tree->sphere = Sphere(2,0,0,0);
-    std::cout << "Running radius search..\n";
-    tree->radiusSearch();
-    std::cout << "Number of points found within radius of " << tree->sphere.radius << ": " << tree->nodes <<"\n";
-    tree->nodes = 0;
+  case CARTESIAN_3D_GEOMETRY : {
+    std::cout << "Cartesian 3D geometry";
   }
+  }
+  std::cout << std::endl;
+  
+  sc->initWithNCData(&ssData);  
+  //sc->initRandom();
+  
+  std::ofstream cfile("octreeSphereCoords.txt");
+  sc->writeCoordsCSV(cfile);
+  cfile.close();
+  
+  const scalar_type maxAspectRatio = 2.0;
+  
+  std::shared_ptr<Tree> tree(new Tree(sc, maxAspectRatio));
+  std::cout << tree->infoString();
+  
+  const int nCoordsPerNode = 20;
+  
+  tree->buildTree(nCoordsPerNode);
+  std::cout << "returned from generateTree:" << std::endl;
+  std::cout << "\t nNodes = " << tree->nNodes() << std:: endl;
+  std::cout << "\n nRecursiveNodes " << tree->recursiveNNodes() <<std::endl;
+  std::cout << "\t treeDepth = " << tree->depth() << std::endl;
+  
+  std::cout << tree->infoString();
+  
+  const std::string fname("sphereOctreeUnitTest.vtk");
+  std::stringstream ss;
+  ss << "nCoords = " << nMax << ", nCoordsPerNode = " << nCoordsPerNode;
+  tree->writeToVtk(fname, ss.str());
+  tree->sphere = Sphere(2,0,0,0);
+  std::cout << "Running radius search..\n";
+  tree->radiusSearch();
+  std::cout << "Number of points found within radius of " << tree->sphere.radius << ": " << tree->nodes <<"\n";
+  tree->nodes = 0;
 }
 

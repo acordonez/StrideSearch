@@ -1,5 +1,6 @@
 #include "LpmSphericalCoords.h"
 #include "LpmXyzVector.h"
+#include "StrideSearchUtilities.h"
 #include <cmath>
 #include <random>
 #include <chrono>
@@ -75,6 +76,17 @@ void SphericalCoords::initRandom(const bool useTimeSeed, const scalar_type domai
         const scalar_type zz = (1.0 - 2.0 * (uu * uu + vv * vv)) * domainRadius;
         insert(xx, yy, zz);
     }
+}
+
+void SphericalCoords::initWithNCData(const StrideSearchData* data_ptr){
+  std::cout<<"Number of lats: "<<data_ptr->lats.size();
+  scalar_type x,y,z;
+  for(int lat = 0; lat < data_ptr->lats.size(); lat++){
+    llToXYZ(x,y,z,data_ptr->lats[lat],data_ptr->lons[lat]);
+    insert(x,y,z);
+    std::cout << "lat: " << data_ptr->lats[lat] << ", lon: " << data_ptr->lons[lat] << std::endl;
+    std::cout<< "x: "<< x << ", y: " << y << ", z: " << z << std::endl;
+  }
 }
 
 }

@@ -8,6 +8,10 @@
 #include "LpmTypeDefs.h"
 #include "LpmXyzVector.h"
 #include "LpmCoords.h"
+#include "StrideSearchDataLatLon.h"
+#include "StrideSearchData_Base.h"
+
+using namespace StrideSearch;
 
 namespace Lpm {
 
@@ -35,6 +39,8 @@ class SphericalCoords : public Coords {
 		inline scalar_type radius() const {return _radius;}
 		
 		void initRandom(const bool useTimeSeed = false, const scalar_type domainRadius = 1.0);
+
+		void initWithNCData(const StrideSearchData* data_ptr);
 		
 	protected : 
 		scalar_type _radius;
