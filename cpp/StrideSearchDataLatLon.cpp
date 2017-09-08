@@ -22,6 +22,8 @@ void StrideSearchDataLatLon::initDimensions(){
       
     lats = std::vector<scalar_type>(&latArr[0], &latArr[0] + nLat);
     lons = std::vector<scalar_type>(&lonArr[0], &lonArr[0] + nLon);
+
+    convertSetToXYZ(lats,lons,x,y,z);
 }
 
 std::string StrideSearchDataLatLon::infoString() const {

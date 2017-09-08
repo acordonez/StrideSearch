@@ -55,6 +55,10 @@ class StrideSearchData {
 
         std::vector<scalar_type> lons;
         std::vector<scalar_type> lats;
+
+	std::vector<scalar_type> x;
+	std::vector<scalar_type> y;
+	std::vector<scalar_type> z;
         
         std::string infoString() const;
         

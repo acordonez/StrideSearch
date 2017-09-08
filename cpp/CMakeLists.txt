@@ -123,15 +123,7 @@ ADD_LIBRARY(strideSearch StrideSearchUtilities.cpp StrideSearchDateTime.cpp Stri
             StrideSearchSector.cpp StrideSearchWorkspaceDict.cpp StrideSearchIDCriterion_Base.cpp
             StrideSearchMinMaxCriteria.cpp StrideSearchSectorList_Base.cpp StrideSearchSectorListLatLon.cpp
             StrideSearchData_Base.cpp StrideSearchDataLatLon.cpp StrideSearchEventList.cpp
-            StrideSearchCollocationCriteria.cpp ./lpmCxx/src/LpmXyzVector.cpp 
-	    ./lpmCxx/src/LpmOutputMessage.cpp ./lpmCxx/src/LpmLogger.cpp ./lpmCxx/src/LpmCoords.cpp 
-	    ./lpmCxx/src/LpmEuclideanCoords.cpp ./lpmCxx/src/LpmSphericalCoords.cpp ./lpmCxx/src/LpmField.cpp
-	    ./lpmCxx/src/LpmEdges.cpp ./lpmCxx/src/LpmFaces.cpp ./lpmCxx/src/LpmTriFaces.cpp 
-	    ./lpmCxx/src/LpmQuadFaces.cpp ./lpmCxx/src/LpmMeshSeed.cpp ./lpmCxx/src/LpmPolyMesh2d.cpp 
-	    ./lpmCxx/src/LpmVtkFileIO.cpp ./lpmCxx/src/LpmParticles.cpp ./lpmCxx/src/LpmMeshedParticles.cpp 
-	    ./lpmCxx/src/LpmMPIReplicatedData.cpp ./lpmCxx/src/LpmTimer.cpp ./lpmCxx/src/LpmDirectSum.cpp 
-	    ./lpmCxx/src/LpmBox3d.cpp ./lpmCxx/src/LpmOctree.cpp ./lpmCxx/src/LpmTaylorSeries3d.cpp
-	    ./lpmCxx/src/LpmTreeSum.cpp 
+            StrideSearchCollocationCriteria.cpp StrideSearchOctree.cpp StrideSearchBox3d.cpp
             )
 
 
@@ -150,6 +142,10 @@ ENABLE_TESTING()
 ADD_EXECUTABLE(ssUtilTest.exe SSUtilitiesTests.cpp)
 TARGET_LINK_LIBRARIES(ssUtilTest.exe strideSearch)
 ADD_TEST(NAME SSUtil COMMAND ${PROJECT_BINARY_DIR}/bin/ssUtilTest.exe)
+
+ADD_EXECUTABLE(ssUnstTest.exe SSUnstructuredUnitTest.cpp)
+TARGET_LINK_LIBRARIES(ssUnstTest.exe strideSearch)
+ADD_TEST(NAME SSUnst COMMAND ${PROJECT_BINARY_DIR}/bin/ssUnstTest.exe)
 
 ADD_EXECUTABLE(ssEventTest.exe SSEventTests.cpp)
 TARGET_LINK_LIBRARIES(ssEventTest.exe strideSearch)
@@ -178,10 +174,6 @@ ADD_TEST(NAME SSSectorList COMMAND ${PROJECT_BINARY_DIR}/bin/ssSectorListUnitTes
 ADD_EXECUTABLE(ssDataLatLonUnitTest.exe SSDataLatLonUnitTest.cpp)
 TARGET_LINK_LIBRARIES(ssDataLatLonUnitTest.exe strideSearch)
 ADD_TEST(NAME ssDataLatLonUnitTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssDataLatLonUnitTest.exe)
-
-ADD_EXECUTABLE(ssUnstructuredTest.exe StrideSearchDataUnstructured.cpp)
-TARGET_LINK_LIBRARIES(ssUnstructuredTest.exe strideSearch)
-ADD_TEST(NAME ssUnstructuredTest COMMAND ${PROJECT_BINARY_DIR}/bin/ssUnstructured.exe)
 
 #ADD_EXECUTABLE(ssWorkspaceTest.exe SSWorkspaceTests.cpp)
 #TARGET_LINK_LIBRARIES(ssWorkspaceTest.exe strideSearch)

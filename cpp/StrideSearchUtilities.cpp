@@ -18,6 +18,18 @@ void llToXYZ(scalar_type& x, scalar_type& y, scalar_type& z, const scalar_type& 
     z = std::sin(deg2rad * lat);
 }
 
+void convertSetToXYZ(const std::vector<scalar_type>& lats, const std::vector<scalar_type>& lons, std::vector<scalar_type>& x, std::vector<scalar_type>& y, std::vector<scalar_type>& z){
+  scalar_type tx,ty,tz;
+  for(int i = 0; i < lats.size(); i++){
+    for(int j = 0; j < lons.size(); j++){
+      llToXYZ(tx,ty,tz,lats[i],lons[j]);
+      x.push_back(tx);
+      y.push_back(ty);
+      z.push_back(tz);
+    }
+  }
+}
+
 scalar_type atan4( const scalar_type y, const scalar_type x)
 {
     scalar_type result = 0.0;

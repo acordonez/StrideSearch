@@ -48,6 +48,8 @@ void llToXYZ(scalar_type& x, scalar_type& y, scalar_type& z, const scalar_type& 
 */
 void XyzToLL(scalar_type& lat, scalar_type& lon, const scalar_type& x, const scalar_type& y, const scalar_type& z);
 
+void convertSetToXYZ(const std::vector<scalar_type>& lats, const std::vector<scalar_type>& lons, std::vector<scalar_type>& x, std::vector<scalar_type>& y, std::vector<scalar_type>& z);
+
 /// Computes the geodesic length in kilometers between two points on an Earth-sized sphere (const radius = EARTH_RADIUS_KM).
 /**
     Assumes input values are given in degrees.
