@@ -20,11 +20,11 @@ namespace StrideSearch {
     scalar_type maxY = *std::max_element(y.begin(), y.end());
     scalar_type maxZ = *std::max_element(z.begin(), z.end());
 
-    Box3d rbox(minX - BOX_PADDING_FACTOR * minX,
+    Box3d rbox(minX + BOX_PADDING_FACTOR * minX,
 	       maxX + BOX_PADDING_FACTOR * maxX,
-	       minY - BOX_PADDING_FACTOR * minY,
+	       minY + BOX_PADDING_FACTOR * minY,
 	       maxY + BOX_PADDING_FACTOR * maxY,
-	       minZ - BOX_PADDING_FACTOR * minZ,
+	       minZ + BOX_PADDING_FACTOR * minZ,
 	       maxZ + BOX_PADDING_FACTOR * maxZ);
 
     std::vector<index_type> rinds;
@@ -184,11 +184,13 @@ namespace StrideSearch {
   void Tree::radiusSearch()
   {
     radiusSearch(_root.get());
+    //printTree(_root.get());
   }
   
   void Tree::radiusSearch(Node* node)
   {
     int index = 0;
+    if(!node->hasKids()) {
       if(sphere.intersectsBox(node->box) && node->nCoords() > 0) {
 	for(int i = 0; i < node->nCoords(); i++) {
 	  index = node->coordsContained[i];
@@ -196,12 +198,28 @@ namespace StrideSearch {
 	    nodes++;
 	  }
 	}
-      return;
+	return;
       }
-      else {
-      for(int i = 0; i < node->kids.size(); i++) {
-	radiusSearch(node->kids[i].get());
+    }
+    else {
+      //std::cout<<"Printing Node's kids: " <<node->infoString()<<std::endl;
+      for(int j = 0; j < node->kids.size(); j++) {
+	//std::cout<<node->kids[j]->infoString()<<std::endl;
+	radiusSearch(node->kids[j].get());
       }
-      }
+    }
+  }
+  void Tree::printTree(Node* node) {
+    //for(int i = 0; i < node->coordsContained.size(); i++) std::cout<<node->coordsContained[i]<<std::endl;
+    //for(int i = 0; i < 1000; i++) std::cout<<"x: " << x[i] << ", y: " << y[i] << ", z: " << z[i] << std::endl;
+    std::cout<<"Parent:"<<node->infoString()<<std::endl;
+    for(int i = 0; i < node->kids.size(); i++) {
+      std::cout<<node->kids[i]->infoString()<<std::endl;
+      //Node* kid = node->kids[i].get();
+      //for(int j = 0; j < kid->coordsContained.size(); j++) std::cout<<kid->coordsContained[j]<<std::endl;
+    }
+    for(int i = 0; i < node->kids.size(); i++) {
+      printTree(node->kids[i].get());
+    }
   }
 }

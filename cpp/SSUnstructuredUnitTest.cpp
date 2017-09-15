@@ -40,7 +40,7 @@ int main() {
    std::shared_ptr<Tree> tree(new Tree(ssData.x, ssData.y, ssData.z,1.5));
    //tree.buildTree(5);
    std::cout << "tree info: " << tree->infoString();
-   tree->buildTree(10);
+   tree->buildTree(1);
    std::cout << "returned from generateTree:" << std::endl;
    std::cout << "\t nNodes = " << tree -> nNodes() << std::endl;
    std::cout << "\t nRecursiveNodes " << tree->recursiveNNodes() << std::endl;
@@ -48,7 +48,9 @@ int main() {
   
    std::cout << tree->infoString();
 
-   tree->sphere = Sphere(2,0,0,0);
+   //tree->printTree(tree->_root.get());
+
+   tree->sphere = Sphere(20,0,0,0);
    std::cout<<"Running radius search...\n";
    tree->radiusSearch();
    std::cout<<"Number of points found within radius of " << tree->sphere.radius<< ": " << tree->nodes<<"\n";

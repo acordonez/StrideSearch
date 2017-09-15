@@ -11,7 +11,7 @@
 
 namespace StrideSearch {
 
-#define BOX_PADDING_FACTOR 0.00001
+#define BOX_PADDING_FACTOR 0.00005
 
     struct Node {
       Node(const Box3d& bbox,Node* pparent = NULL, 
@@ -70,6 +70,8 @@ class Tree{
   index_type recursiveNNodes() const {return recursiveNodeCount(_root.get());}
 
   virtual void buildTree(const index_type maxCoordsPerNode);
+
+  void printTree(Node* node);
   
   void writeToVtk(const std::string& filename, const std::string& desc = "") const;
 
