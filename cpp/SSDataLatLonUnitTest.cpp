@@ -57,7 +57,7 @@ int main() {
     std::cout << "SectorList built, nSectors = " << secList.nSectors() << std::endl;
     //secList.SectorList::linkSectorsToData(&ssData);
     ssData.BuildKDTree();
-    secList.SectorList::fastLinkSectorsToData(&ssData);
+    //secList.SectorList::fastLinkSectorsToData(&ssData);
     
     std::cout << secList.infoString();
     

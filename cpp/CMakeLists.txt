@@ -123,7 +123,7 @@ ADD_LIBRARY(strideSearch StrideSearchUtilities.cpp StrideSearchDateTime.cpp Stri
             StrideSearchSector.cpp StrideSearchWorkspaceDict.cpp StrideSearchIDCriterion_Base.cpp
             StrideSearchMinMaxCriteria.cpp StrideSearchSectorList_Base.cpp StrideSearchSectorListLatLon.cpp
             StrideSearchData_Base.cpp StrideSearchDataLatLon.cpp StrideSearchEventList.cpp
-            StrideSearchCollocationCriteria.cpp StrideSearchOctree.cpp StrideSearchBox3d.cpp
+            StrideSearchCollocationCriteria.cpp StrideSearchKdd.cpp
             )
 
 
@@ -142,10 +142,6 @@ ENABLE_TESTING()
 ADD_EXECUTABLE(ssUtilTest.exe SSUtilitiesTests.cpp)
 TARGET_LINK_LIBRARIES(ssUtilTest.exe strideSearch)
 ADD_TEST(NAME SSUtil COMMAND ${PROJECT_BINARY_DIR}/bin/ssUtilTest.exe)
-
-ADD_EXECUTABLE(ssUnstTest.exe SSUnstructuredUnitTest.cpp)
-TARGET_LINK_LIBRARIES(ssUnstTest.exe strideSearch)
-ADD_TEST(NAME SSUnst COMMAND ${PROJECT_BINARY_DIR}/bin/ssUnstTest.exe)
 
 ADD_EXECUTABLE(ssEventTest.exe SSEventTests.cpp)
 TARGET_LINK_LIBRARIES(ssEventTest.exe strideSearch)

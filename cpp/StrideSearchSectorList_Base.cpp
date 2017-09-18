@@ -1,7 +1,6 @@
 #include "StrideSearchUtilities.h"
 #include "StrideSearchSectorList_Base.h"
 #include "StrideSearchData_Base.h"
-#include "kdd_radius.h"
 #include <vector>
 #include <cmath>
 #include <memory>
